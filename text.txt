@@ -1,0 +1,9 @@
+MATRIX_MODE=production \
+DATABASE_URL=postgres://prod-db \
+API_KEY=prod-secret-123 \
+LOG_LEVEL=WARNING \
+ZION_ENDPOINT=https://zion.prod/api \
+python3 oracle.py
+
+_______________
+python3 -c "from dotenv import load_dotenv; print('OK')"

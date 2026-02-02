@@ -1,13 +1,28 @@
-import sys
 import os
 import site
+import sys
 
 
-def is_in_venv():
+def is_in_venv() -> bool:
     return sys.prefix != sys.base_prefix
 
 
-def main():
+def print_site_packages() -> None:
+    print("Package installation path:")
+    try:
+        paths = site.getsitepackages()
+        for p in paths:
+            print(p)
+    except Exception:
+        major = sys.version_info.major
+        minor = sys.version_info.minor
+        path = os.path.join(
+            sys.prefix, "lib", f"python{major}.{minor}", "site-packages"
+        )
+        print(path)
+
+
+def main() -> None:
     inside = is_in_venv()
     python_path = sys.executable
 
@@ -19,6 +34,10 @@ def main():
         print("WARNING: You're in the global environment!")
         print("The machines can see everything you install.")
         print()
+        print_site_packages()
+
+        print()
+
         print("To enter the construct, run:")
         print("python -m venv matrix_env")
         print("source matrix_env/bin/activate # On Unix")
@@ -41,19 +60,7 @@ def main():
     print("Safe to install packages without affecting")
     print("the global system.")
     print()
-    print("Package installation path:")
-
-    try:
-        print(site.getsitepackages()[0])
-    except Exception:
-        # fallback (in case getsitepackages isn't available)
-        major = sys.version_info.major
-        minor = sys.version_info.minor
-        path = os.path.join(
-            sys.prefix, "lib", "python" +
-                        str(major) + "." + str(minor), "site-packages"
-        )
-        print(path)
+    print_site_packages()
 
 
 if __name__ == "__main__":
